@@ -60,6 +60,7 @@ in import nmtSrc {
     ./modules/programs/bacon
     ./modules/programs/bash
     ./modules/programs/bat
+    ./modules/programs/borgmatic
     ./modules/programs/bottom
     ./modules/programs/broot
     ./modules/programs/browserpass
@@ -110,6 +111,7 @@ in import nmtSrc {
     ./modules/programs/ncmpcpp
     ./modules/programs/ne
     ./modules/programs/neomutt
+    ./modules/programs/neovide
     ./modules/programs/neovim
     ./modules/programs/newsboat
     ./modules/programs/nheko
@@ -153,6 +155,7 @@ in import nmtSrc {
     ./modules/programs/tmux
     ./modules/programs/topgrade
     ./modules/programs/translate-shell
+    ./modules/programs/vifm
     ./modules/programs/vim-vint
     ./modules/programs/vscode
     ./modules/programs/watson
@@ -162,6 +165,7 @@ in import nmtSrc {
     ./modules/programs/zk
     ./modules/programs/zplug
     ./modules/programs/zsh
+    ./modules/services/gpg-agent
     ./modules/services/syncthing/common
     ./modules/xresources
   ] ++ lib.optionals isDarwin [
@@ -187,9 +191,9 @@ in import nmtSrc {
     ./modules/programs/awscli
     ./modules/programs/beets # One test relies on services.mpd
     ./modules/programs/bemenu
-    ./modules/programs/borgmatic
     ./modules/programs/boxxy
     ./modules/programs/firefox/firefox.nix
+    ./modules/programs/firefox/floorp.nix
     ./modules/programs/foot
     ./modules/programs/freetube
     ./modules/programs/fuzzel
@@ -242,7 +246,6 @@ in import nmtSrc {
     ./modules/services/fusuma
     ./modules/services/git-sync
     ./modules/services/glance
-    ./modules/services/gpg-agent
     ./modules/services/gromit-mpx
     ./modules/services/home-manager-auto-upgrade
     ./modules/services/hypridle
@@ -269,12 +272,14 @@ in import nmtSrc {
     ./modules/services/remmina
     ./modules/services/screen-locker
     ./modules/services/signaturepdf
+    ./modules/services/snixembed
     ./modules/services/swayidle
     ./modules/services/swaync
     ./modules/services/swayosd
     ./modules/services/sxhkd
     ./modules/services/syncthing/linux
     ./modules/services/trayer
+    ./modules/services/trayscale
     ./modules/services/twmn
     ./modules/services/udiskie
     ./modules/services/window-managers/bspwm

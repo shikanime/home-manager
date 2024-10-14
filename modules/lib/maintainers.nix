@@ -7,6 +7,12 @@
 # [1] https://github.com/NixOS/nixpkgs/blob/fca0d6e093c82b31103dc0dacc48da2a9b06e24b/maintainers/maintainer-list.nix#LC1
 
 {
+  aabccd021 = {
+    name = "Muhamad Abdurahman";
+    email = "aabccd021@gmail.com";
+    github = "aabccd021";
+    githubId = 33031950;
+  };
   abayomi185 = {
     name = "Yomi";
     email = "yomi+nix@yomitosh.com";
@@ -275,6 +281,12 @@
     email = "robertomartinezp@gmail.com";
     github = "nilp0inter";
     githubId = 1224006;
+  };
+  NitroSniper = {
+    name = "Nitro Sniper";
+    email = "nitro@ortin.dev";
+    github = "NitroSniper";
+    githubId = 44097331;
   };
   seylerius = {
     email = "sable@seyleri.us";
@@ -586,5 +598,13 @@
     email = "zorrobert@mailbox.org";
     github = "zorrobert";
     githubId = 118135271;
+  };
+  callumio = {
+    name = "Callum Leslie";
+    email = "git+nix@cleslie.uk";
+    github = "callumio";
+    githubId = 16057677;
+    keys =
+      [{ fingerprint = "BC82 4BB5 1656 D144 285E  A0EC D382 C4AF EECE AA90"; }];
   };
 }
