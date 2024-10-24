@@ -95,6 +95,14 @@ in {
       package = mkPackageOption pkgs "nix-direnv" { };
     };
 
+    mise = {
+      enable = mkEnableOption ''
+        [mise](https://mise.jdx.dev/direnv.html),
+        integration of mise in direnv'';
+
+      package = mkPackageOption pkgs "mise" { };
+    };
+
     silent = mkEnableOption "silent mode, that is, disabling direnv logging";
   };
 
@@ -111,6 +119,12 @@ in {
 
     xdg.configFile."direnv/direnvrc" =
       lib.mkIf (cfg.stdlib != "") { text = cfg.stdlib; };
+
+    xdg.configFile."direnv/lib/hm-mise.sh" = mkIf cfg.mise.enable {
+      text = ''
+        eval "$(${cfg.mise.package}/bin/mise direnv activate)"
+      '';
+    };
 
     programs.bash.initExtra = mkIf cfg.enableBashIntegration (
       # Using mkAfter to make it more likely to appear after other
@@ -130,60 +144,29 @@ in {
         ${getExe cfg.package} hook fish | source
       '');
 
-    programs.nushell.extraConfig = mkIf cfg.enableNushellIntegration (let
-      # We want to get the stdout from direnv even if it exits with non-zero,
-      # because it will have the DIRENV_ internal variables defined.
-      #
-      # However, nushell's current implementation of try-catch is subtly
-      # broken with external commands in pipelines[0].
-      #
-      # This means we don't have a good way to ignore the exit code
-      # without using do | complete, which has a side effect of also
-      # capturing stderr, which we don't want.
-      #
-      # So, as a workaround, we wrap nushell in a second script that
-      # just ignores the exit code and does nothing else, allowing
-      # nushell to capture our stdout, but letting stderr go through
-      # and not causing a spurious "command failed" message.
-      #
-      # [0]: https://github.com/nushell/nushell/issues/13868
-      #
-      # FIXME: remove the wrapper once the upstream issue is fixed
-
-      direnvWrapped = pkgs.writeShellScript "direnv-wrapped" ''
-        ${getExe cfg.package} export json || true
-      '';
-      # Using mkAfter to make it more likely to appear after other
-      # manipulations of the prompt.
-    in mkAfter ''
+    # Using mkAfter to make it more likely to appear after other
+    # manipulations of the prompt.
+    programs.nushell.extraConfig = mkIf cfg.enableNushellIntegration (mkAfter ''
       $env.config = ($env.config? | default {})
       $env.config.hooks = ($env.config.hooks? | default {})
       $env.config.hooks.pre_prompt = (
           $env.config.hooks.pre_prompt?
           | default []
           | append {||
-              let direnv = (
-                  ${direnvWrapped}
-                  | from json --strict
-                  | default {}
-              )
-              if ($direnv | is-empty) {
-                  return
-              }
-              $direnv
+              ${getExe cfg.package} export json
+              | from json --strict
+              | default {}
               | items {|key, value|
-                  {
-                      key: $key
-                      value: (do (
-                          $env.ENV_CONVERSIONS?
-                          | default {}
-                          | get -i $key
-                          | get -i from_string
-                          | default {|x| $x}
-                      ) $value)
-                  }
+                  let value = do (
+                      $env.ENV_CONVERSIONS?
+                      | default {}
+                      | get -i $key
+                      | get -i from_string
+                      | default {|x| $x}
+                  ) $value
+                  return [ $key $value ]
               }
-              | transpose -ird
+              | into record
               | load-env
           }
       )
