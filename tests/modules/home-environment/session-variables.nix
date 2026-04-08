@@ -16,6 +16,7 @@ let
     export XDG_CONFIG_HOME="/home/hm-user/.config"
     export XDG_DATA_HOME="/home/hm-user/.local/share"
     export XDG_STATE_HOME="/home/hm-user/.local/state"
+    export PATH="$HOME/.local/bin''${PATH:+:}$PATH"
 
   '';
 
@@ -30,6 +31,7 @@ let
     export XDG_CONFIG_HOME="/home/hm-user/.config"
     export XDG_DATA_HOME="/home/hm-user/.local/share"
     export XDG_STATE_HOME="/home/hm-user/.local/state"
+    export PATH="$HOME/.local/bin''${PATH:+:}$PATH"
 
   '';
 

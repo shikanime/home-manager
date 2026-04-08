@@ -7,6 +7,7 @@
 
 let
   inherit (lib)
+    mkAfter
     mkOptionDefault
     mkIf
     mkOption
@@ -117,6 +118,15 @@ in
         Sets `XDG_STATE_HOME` for the user if `xdg.enable` is set `true`.
       '';
     };
+
+    localBinInPath = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to add {file}`$HOME/.local/bin` to {env}`PATH` when
+        {option}`xdg.enable` is enabled.
+      '';
+    };
   };
 
   config = lib.mkMerge [
@@ -137,6 +147,8 @@ in
 
         home.sessionVariables = variables;
         systemd.user.sessionVariables = variables;
+
+        home.sessionPath = mkIf cfg.localBinInPath (mkAfter [ "$HOME/.local/bin" ]);
       }
     )
 
